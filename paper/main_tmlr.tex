@@ -387,11 +387,11 @@ single-date Sentinel-2 with true field labels. They do not necessarily extend to
 other tasks (e.g.\ crop-type, change detection), other sensors, or multi-temporal
 regimes. GeoFM pretraining may help there.
 
-\paragraph{Why not ``GeoFMs are useless.''} We do not argue against GeoFMs. We argue
-that current evaluations overstate their advantage for in-distribution field mapping
-with reasonable supervision, and that their practical value here is as frozen
-feature extractors. They are cheap, stable, and transfer-competitive in that
-configuration, rather than as backbones to fine-tune.
+\paragraph{Scope of the claim.} The claim is not that GeoFMs are useless. Current
+evaluations overstate their advantage for in-distribution field mapping with
+reasonable supervision; the practical value here is as frozen feature extractors,
+which are cheap, stable, and transfer-competitive in that configuration rather than
+as backbones to fine-tune.
 
 \paragraph{Limitations.} Four GeoFMs evaluated here (PANGAEA covers more, with the
 same pattern); a single supervised architecture (PANGAEA independently replicates
@@ -582,8 +582,8 @@ AP; F1 and IoU are close across models there because positives are sparse (about
 0.3\%). Kenya (about 0.1\% positives) shows the sharpest gap: both the frozen probe
 and the full fine-tune collapse to F1$=$IoU$=$0 at the standard threshold, and AP
 drops to 0.32 to 0.38, while the supervised U-Net retains AP$=$0.58 and F1$=$0.115.
-The supervised CNN is therefore the more robust choice in the extreme-sparsity
-regime, across every metric and not only AUROC. ``Frozen'' = Prithvi backbone
+In the extreme-sparsity regime the supervised CNN wins on every
+metric, not only AUROC. ``Frozen'' = Prithvi backbone
 frozen, decoder trained (apples-to-apples vs.\ full fine-tune).}
 \label{tab:xmetrics}
 \begin{tabular}{llcccc}
