@@ -1,0 +1,90 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "dct": "http://purl.org/dc/terms/",
+    "sc": "https://schema.org/",
+    "data": {"@id": "cr:data", "@type": "@json"},
+    "dataType": {"@id": "cr:dataType", "@type": "@vocab"},
+    "field": "cr:field",
+    "fileObject": "cr:fileObject",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "recordSet": "cr:recordSet",
+    "source": "cr:source"
+  },
+  "@type": "sc:Dataset",
+  "conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "frozen-not-finetuned-eval",
+  "description": "Evaluation artifacts for a controlled study of geospatial foundation models (GeoFMs) on agricultural field-boundary mapping from Sentinel-2. The release contains derived evaluation metrics (per-region, per-model AUROC under true Fields-of-The-World field labels vs. ESA WorldCover cropland proxy labels; in-region and cross-region transfer; frozen vs. fine-tuned comparisons; controls) and the code/apparatus to reproduce them. It does NOT redistribute raw satellite imagery; Sentinel-2, ESA WorldCover, and Fields of The World are referenced at their open sources.",
+  "version": "1.0.0",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "url": "https://anonymous.4open.science/r/frozen-not-finetuned-eval",
+  "citation": "Anonymous. Frozen, Not Fine-tuned: A Controlled Evaluation of Geospatial Foundation Models for Agricultural Field Mapping. Under review, 2026.",
+  "creator": {"@type": "sc:Person", "name": "Anonymous (double-blind review)"},
+  "datePublished": "2026-05-27",
+  "keywords": ["geospatial foundation models", "evaluation", "field boundary mapping", "Sentinel-2", "Fields of The World", "frozen features", "fine-tuning"],
+
+  "rai:dataCollection": "Derived metrics computed from public Sentinel-2 L2A scenes (Copernicus/Google Earth Engine), ESA WorldCover 10m v200, and Fields of The World (FTW) field-boundary polygons, across six countries (India, Cambodia, Vietnam, Kenya, France, Netherlands). No new imagery or labels were collected; we compute evaluation metrics over existing public sources.",
+  "rai:dataCollectionType": "Derived/secondary analysis of existing public datasets.",
+  "rai:dataBiases": "Geographic coverage is limited to six FTW countries and to single-date Sentinel-2; results may not generalize to other sensors, dates, or regions. FTW provides partial field annotation (a subset of fields per chip is delineated), which is most pronounced in India and Kenya; a sensitivity analysis (restricting negatives to high-confidence non-cropland) shows the conclusions are stable. Kenya has extreme label sparsity (~0.1% positive pixels) and is a characterized boundary case.",
+  "rai:dataLimitations": "Metrics are for field-boundary membership from single-date S2; they do not cover crop-type classification, multi-temporal tasks, or other modalities. Four GeoFMs are evaluated directly (Clay, Prithvi-EO-2.0, TerraMind, AnySat); broader coverage is cited via the PANGAEA benchmark. The released artifact contains numeric metrics and code, not the underlying imagery.",
+  "rai:dataUseCases": "Intended for: (i) auditing/benchmarking GeoFM evaluation practices; (ii) reproducing the paper's controlled comparisons; (iii) guiding practitioners on frozen-feature vs. fine-tuning choices for agricultural field mapping. Not intended for operational land-tenure, taxation, or enforcement decisions.",
+  "rai:personalSensitiveInformation": "None. The artifact contains aggregate evaluation metrics and code over public Earth-observation data; it includes no personal or sensitive information. Field boundaries derive from the public FTW dataset.",
+  "rai:dataSocialImpact": "Promotes more honest, cost-effective evaluation of EO foundation models, relevant to smallholder-agriculture monitoring in data-scarce regions; misuse risk is low as no individual-level data is involved.",
+
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "repo",
+      "name": "code-repository",
+      "description": "Code, controlled-evaluation apparatus, and reproduction commands.",
+      "contentUrl": "https://anonymous.4open.science/r/frozen-not-finetuned-eval",
+      "encodingFormat": "git+https"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "master-results",
+      "name": "ftw_master_results.json",
+      "description": "Per-region in-region AUROC for RF (true/proxy), U-Net, frozen-FM, fine-tuned-FM (mean over 3 seeds).",
+      "containedIn": {"@id": "repo"},
+      "contentUrl": "data/results/ftw_master_results.json",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "transfer-results",
+      "name": "ftw_transfer_strengthened.json",
+      "description": "Cross-region transfer AUROC over 10 directed country pairs (U-Net, fine-tuned-FM, frozen Prithvi/TerraMind).",
+      "containedIn": {"@id": "repo"},
+      "contentUrl": "data/results/ftw_transfer_strengthened.json",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "probe-inregion",
+      "name": "ftw_probe_inregion.json",
+      "description": "In-region apples-to-apples frozen-backbone+decoder vs. full fine-tune (Prithvi, TerraMind).",
+      "containedIn": {"@id": "repo"},
+      "contentUrl": "data/results/ftw_probe_inregion.json",
+      "encodingFormat": "application/json"
+    }
+  ],
+
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "inregion_metrics",
+      "name": "inregion_metrics",
+      "description": "In-region true-label AUROC per region and model.",
+      "field": [
+        {"@type": "cr:Field", "@id": "inregion_metrics/region", "name": "region", "description": "Country (india, cambodia, vietnam, kenya, france, netherlands).", "dataType": "sc:Text", "source": {"fileObject": {"@id": "master-results"}, "extract": {"column": "region"}}},
+        {"@type": "cr:Field", "@id": "inregion_metrics/rf_true", "name": "rf_true", "description": "Per-pixel random-forest AUROC on true field labels.", "dataType": "sc:Float", "source": {"fileObject": {"@id": "master-results"}, "extract": {"column": "rf_true"}}},
+        {"@type": "cr:Field", "@id": "inregion_metrics/unet", "name": "unet", "description": "Supervised U-Net AUROC on true labels (mean over 3 seeds).", "dataType": "sc:Float", "source": {"fileObject": {"@id": "master-results"}, "extract": {"column": "unet"}}},
+        {"@type": "cr:Field", "@id": "inregion_metrics/frozen_best_fm", "name": "frozen_best_fm", "description": "Best frozen GeoFM linear-probe AUROC on true labels.", "dataType": "sc:Float", "source": {"fileObject": {"@id": "master-results"}, "extract": {"column": "frozen_best_fm"}}}
+      ]
+    }
+  ]
+}

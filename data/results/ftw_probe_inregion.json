@@ -1,0 +1,102 @@
+{
+  "prithvi": {
+    "india": {
+      "frozen_backbone": [
+        0.983,
+        0.001
+      ],
+      "full_ft": [
+        0.983,
+        0.003
+      ],
+      "delta_frozen_minus_full": 0.0
+    },
+    "cambodia": {
+      "frozen_backbone": [
+        0.947,
+        0.001
+      ],
+      "full_ft": [
+        0.949,
+        0.0
+      ],
+      "delta_frozen_minus_full": -0.002
+    },
+    "vietnam": {
+      "frozen_backbone": [
+        0.954,
+        0.0
+      ],
+      "full_ft": [
+        0.951,
+        0.0
+      ],
+      "delta_frozen_minus_full": 0.003
+    },
+    "france": {
+      "frozen_backbone": [
+        0.982,
+        0.0
+      ],
+      "full_ft": [
+        0.978,
+        0.001
+      ],
+      "delta_frozen_minus_full": 0.004
+    },
+    "netherlands": {
+      "frozen_backbone": [
+        0.972,
+        0.001
+      ],
+      "full_ft": [
+        0.959,
+        0.005
+      ],
+      "delta_frozen_minus_full": 0.013
+    },
+    "kenya": {
+      "frozen_backbone": [
+        0.636,
+        0.037
+      ],
+      "full_ft": [
+        0.763,
+        0.012
+      ],
+      "delta_frozen_minus_full": -0.127
+    }
+  },
+  "terramind": {
+    "india": {
+      "frozen_backbone": [
+        0.965,
+        0.014
+      ],
+      "full_ft": [
+        0.964,
+        0.007
+      ],
+      "delta": 0.001
+    },
+    "france": {
+      "frozen_backbone": [
+        0.979,
+        0.0
+      ],
+      "full_ft": [
+        0.973,
+        0.001
+      ],
+      "delta": 0.006
+    },
+    "cambodia": {
+      "frozen_backbone": [
+        0.942,
+        0.0
+      ],
+      "full_ft": null,
+      "delta": null
+    }
+  }
+}
