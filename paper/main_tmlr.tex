@@ -17,8 +17,9 @@
 Most published evaluations of geospatial foundation models (GeoFMs) fine-tune them
 end-to-end. For agricultural field-boundary mapping from Sentinel-2 this is unnecessary.
 Across six countries, a frozen GeoFM backbone with a small decoder matches or
-exceeds full fine-tuning, in-region for both Prithvi-EO-2.0 and TerraMind and
-cross-region for Prithvi-EO-2.0, while training about $110\times$ fewer parameters. Fine-tuning also
+exceeds full fine-tuning, in-region for Prithvi-EO-2.0 (six regions) and TerraMind
+(India and France), and cross-region for Prithvi-EO-2.0, while training about
+$110\times$ fewer parameters. Fine-tuning also
 reduces cross-region transfer. Two evaluation choices have hidden this result. First,
 common benchmarks substitute a coarse land-cover proxy (ESA WorldCover ``cropland'')
 for true field boundaries. Second, they compare GeoFMs against a per-pixel spectral
@@ -152,21 +153,25 @@ WorldCover proxy lifts the per-pixel RF from 0.55--0.82 (\textsc{true}) to 0.79-
 (\textsc{proxy}), making it foundation-model-competitive. A from-scratch U-Net on
 \textsc{true} labels reaches 0.89--0.98 everywhere and matches frozen GeoFMs in five
 of six regions (India excepted), so the reported ``GeoFM\,$\gg$\,baseline'' gap
-mostly reflects the weak per-pixel baseline. ``frozen FM'' = best frozen GeoFM with a
-linear probe; ``FT FM'' = fine-tuned Prithvi. U-Net and FT FM are mean$\pm$std over 3
-seeds; RF and the linear probe are deterministic given the split. The
-frozen-backbone-plus-decoder comparison is in Table~\ref{tab:spine}.}
+mostly reflects the weak per-pixel baseline. ``frozen FM'' is the per-region best
+frozen GeoFM with a linear probe across Prithvi-EO-2.0, TerraMind, Clay, and AnySat;
+superscripts identify the winner per row ($^{\textsc{p}}$ = Prithvi-EO-2.0,
+$^{\textsc{a}}$ = AnySat). ``FT FM'' = fine-tuned Prithvi. U-Net and FT FM are
+mean$\pm$std over 3 seeds; RF and the linear probe are deterministic given the split.
+The apples-to-apples frozen-backbone-plus-decoder comparison in Table~\ref{tab:spine}
+uses Prithvi only; per-model tile-disjoint sensitivity is in
+Appendix Table~\ref{tab:tilesplit}.}
 \label{tab:flaws}
 \begin{tabular}{lccccc}
 \toprule
 Region & RF \textsc{true} & RF \textsc{proxy} & U-Net & frozen FM & FT FM \\
 \midrule
-India        & 0.574 & 0.786 & 0.909\,{\scriptsize$\pm$.034} & \textbf{0.983} & 0.983\,{\scriptsize$\pm$.003} \\
-Cambodia     & 0.550 & 0.900 & 0.948\,{\scriptsize$\pm$.001} & 0.924 & 0.949\,{\scriptsize$\pm$.000} \\
-Vietnam      & 0.643 & 0.911 & 0.962\,{\scriptsize$\pm$.003} & 0.929 & 0.951\,{\scriptsize$\pm$.000} \\
-Kenya        & 0.651 & 0.806 & 0.887\,{\scriptsize$\pm$.002} & 0.853 & 0.763\,{\scriptsize$\pm$.012} \\
-France       & 0.695 & 0.959 & 0.977\,{\scriptsize$\pm$.000} & 0.961 & 0.978\,{\scriptsize$\pm$.001} \\
-Netherlands  & 0.815 & 0.928 & 0.981\,{\scriptsize$\pm$.002} & 0.961 & 0.959\,{\scriptsize$\pm$.005} \\
+India        & 0.574 & 0.786 & 0.909\,{\scriptsize$\pm$.034} & \textbf{0.983}$^{\textsc{p}}$ & 0.983\,{\scriptsize$\pm$.003} \\
+Cambodia     & 0.550 & 0.900 & 0.948\,{\scriptsize$\pm$.001} & 0.924$^{\textsc{p}}$ & 0.949\,{\scriptsize$\pm$.000} \\
+Vietnam      & 0.643 & 0.911 & 0.962\,{\scriptsize$\pm$.003} & 0.929$^{\textsc{p}}$ & 0.951\,{\scriptsize$\pm$.000} \\
+Kenya        & 0.651 & 0.806 & 0.887\,{\scriptsize$\pm$.002} & 0.853$^{\textsc{a}}$ & 0.763\,{\scriptsize$\pm$.012} \\
+France       & 0.695 & 0.959 & 0.977\,{\scriptsize$\pm$.000} & 0.961$^{\textsc{p}}$ & 0.978\,{\scriptsize$\pm$.001} \\
+Netherlands  & 0.815 & 0.928 & 0.981\,{\scriptsize$\pm$.002} & 0.961$^{\textsc{a}}$ & 0.959\,{\scriptsize$\pm$.005} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -244,9 +249,10 @@ spectral RF & $\sim$0.50 \\
 \end{table}
 
 \paragraph{In-region.} With the backbone frozen and only a decoder trained,
-performance matches full fine-tuning on five of six regions (within $\pm0.013$ AUROC)
-for both Prithvi and TerraMind (TerraMind: India $+0.001$, France $+0.006$).
-Fine-tuning the 300M-parameter backbone gives no in-region gain. An
+performance matches full fine-tuning on five of six regions for Prithvi-EO-2.0
+(within $\pm0.013$ AUROC); TerraMind was tested in two regions (frozen-vs-fine-tune
+deltas of $+0.001$ in India and $+0.006$ in France). Fine-tuning the 300M-parameter
+backbone gives no in-region gain. An
 earlier apparent fine-tuning advantage came from an architecture confound: comparing
 a fine-tune-plus-decoder against a frozen linear probe. Giving the frozen backbone
 the same decoder removes the gap.
@@ -533,6 +539,35 @@ Region & RF (all neg) & RF (high-conf) & Prithvi (all neg) & Prithvi (high-conf)
 India  & 0.574 & 0.665 & 0.983 & 0.987 \\
 France & 0.695 & 0.947 & 0.961 & 0.968 \\
 Kenya  & 0.651 & 0.698 & 0.766 & 0.774 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{\textbf{Tile-disjoint sensitivity of the Table~\ref{tab:flaws}
+frozen-probe column (true-label AUROC).} Each pair gives chip-grouped (``chip'',
+used in the main text) vs.\ MGRS-tile-disjoint (``tile'') AUROC for the same frozen
+linear probe. Prithvi-EO-2.0 and TerraMind are stable across both splits in every
+tested region (drops $\le 0.01$). AnySat scores collapse on Kenya
+($0.853 \to 0.580$), Vietnam ($0.897 \to 0.645$), and France ($0.943 \to 0.605$),
+indicating that AnySat's chip-grouped advantage may not fully reflect transferable
+feature quality. In Kenya, where Table~\ref{tab:flaws} reports AnySat $0.853$ as the
+best probe, Prithvi at $0.761$ is more robust under tile-disjoint than AnySat at
+$0.580$. Cambodia is omitted because the tile-disjoint variant was not run. We use
+chip-grouped numbers in the main text because they preserve the per-chip statistical
+assumptions of the controlled comparison; this table is the sensitivity check.}
+\label{tab:tilesplit}
+\begin{tabular}{lcccccc}
+\toprule
+        & \multicolumn{2}{c}{Prithvi-EO-2.0} & \multicolumn{2}{c}{TerraMind} & \multicolumn{2}{c}{AnySat} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Region  & chip & tile & chip & tile & chip & tile \\
+\midrule
+India       & 0.983 & 0.984 & 0.967 & 0.969 & 0.939 & 0.945 \\
+Vietnam     & 0.929 & 0.922 & 0.916 & 0.915 & 0.897 & 0.645 \\
+Kenya       & 0.766 & 0.761 & 0.745 & 0.698 & 0.853 & 0.580 \\
+France      & 0.961 & 0.959 & 0.951 & 0.947 & 0.943 & 0.605 \\
+Netherlands & 0.955 & 0.955 & 0.943 & 0.944 & 0.961 & 0.893 \\
 \bottomrule
 \end{tabular}
 \end{table}
