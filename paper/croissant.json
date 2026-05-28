@@ -21,7 +21,7 @@
   "description": "Evaluation artifacts for a controlled study of geospatial foundation models (GeoFMs) on agricultural field-boundary mapping from Sentinel-2. The release contains derived evaluation metrics (per-region, per-model AUROC under true Fields-of-The-World field labels vs. ESA WorldCover cropland proxy labels; in-region and cross-region transfer; frozen vs. fine-tuned comparisons; controls) and the code/apparatus to reproduce them. It does NOT redistribute raw satellite imagery; Sentinel-2, ESA WorldCover, and Fields of The World are referenced at their open sources.",
   "version": "1.0.0",
   "license": "https://creativecommons.org/licenses/by/4.0/",
-  "url": "https://anonymous.4open.science/r/frozen-not-finetuned-eval",
+  "url": "https://anonymous.4open.science/r/frozen-not-finetuned-eval-C72B",
   "citation": "Anonymous. Frozen, Not Fine-tuned: A Controlled Evaluation of Geospatial Foundation Models for Agricultural Field Mapping. Under review, 2026.",
   "creator": {"@type": "sc:Person", "name": "Anonymous (double-blind review)"},
   "datePublished": "2026-05-27",
@@ -41,7 +41,7 @@
       "@id": "repo",
       "name": "code-repository",
       "description": "Code, controlled-evaluation apparatus, and reproduction commands.",
-      "contentUrl": "https://anonymous.4open.science/r/frozen-not-finetuned-eval",
+      "contentUrl": "https://anonymous.4open.science/r/frozen-not-finetuned-eval-C72B",
       "encodingFormat": "git+https"
     },
     {
